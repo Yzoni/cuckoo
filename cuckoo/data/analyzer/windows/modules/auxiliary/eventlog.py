@@ -15,7 +15,7 @@ class Eventlog(Auxiliary):
 
         if not os.path.exists(self.log_path):
             raise CuckooPackageError(
-                "System.evtx could not be found."
+                "{} could not be found.".format(self.log_path)
             )
 
     def stop(self):

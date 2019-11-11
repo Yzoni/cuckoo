@@ -5,10 +5,10 @@ import subprocess
 
 from cuckoo.common.abstracts import Processing
 
-class Syscalldrv(Processing):
+class Eventlog(Processing):
     """Extract events from syscalldrv output."""
 
-    key = "syscalldrv"
+    key = "eventlog"
 
     def run(self):
         system_evtx = os.path.join(self.logs_path, "System.evtx")
