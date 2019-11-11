@@ -34,9 +34,9 @@ class Eventlog(Auxiliary):
         log.info("=======================")
         log.info(os.getcwd())
         log.info(os.path.dirname(os.path.abspath(__file__)))
-        try:
-            log.info(os.path.exists(os.path.abspath("/Windows/System32/Winevt/Logs/System.evtx")))
-        except Exception:
-            log.info('Does not exist')
+        if os.path.exists(os.path.abspath("/Windows/System32/Winevt/Logs/System.evtx")):
+            log.info("Path exists 1")
+        if os.path.exists(os.path.abspath("/Windows/")):
+            log.info("Path exists 2")
         log.info("=======================")
         upload_to_host(self.eventlog_path, os.path.join("files", "System.evtx"))
