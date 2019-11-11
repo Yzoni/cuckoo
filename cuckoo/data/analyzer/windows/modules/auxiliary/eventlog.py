@@ -14,7 +14,7 @@ class Eventlog(Auxiliary):
     def start(self):
         self.key = "eventlog"
 
-        self.eventlog_path = os.path.abspath("/Windows/System32/Winevt/Logs/System.evtx")
+        self.eventlog_path = os.path.abspath("/Windows/System32/winevt/Logs/System.evtx")
         
         # if not os.path.exists("/Windows/System32/"):
         #     raise CuckooPackageError(
@@ -30,17 +30,17 @@ class Eventlog(Auxiliary):
         #     )
         # Upload the EVTX file to the host.
         
-        upload_to_host(os.path.abspath("/Windows/System32/Winevt/Logs/Setup.evtx"), os.path.join("files", "Setup.evtx"))
+        upload_to_host(os.path.abspath("/Windows/System32/winevt/Logs/Setup.evtx"), os.path.join("files", "Setup.evtx"))
         log.info("=======================")
         log.info(os.getcwd())
         log.info(os.path.dirname(os.path.abspath(__file__)))
-        if os.path.exists(os.path.abspath("/Windows/System32/Winevt/Logs/System.evtx")):
+        if os.path.exists(os.path.abspath("/Windows/System32/winevt/Logs/System.evtx")):
             log.info("Path exists 1")
         if os.path.exists(os.path.abspath("/Windows/System32/")):
             log.info("Path exists 2")
-        if os.path.exists(os.path.abspath("/Windows/System32/Winevt/")):
+        if os.path.exists(os.path.abspath("/Windows/System32/winevt/")):
             log.info("Path exists 3")
-        if os.path.exists(os.path.abspath("/Windows/System32/Winevt/Logs/")):
+        if os.path.exists(os.path.abspath("/Windows/System32/winevt/Logs/")):
             log.info("Path exists 4")
-        log.info("=======================")
+        log.info("=======================a")
         upload_to_host(self.eventlog_path, os.path.join("files", "System.evtx"))
