@@ -26,7 +26,10 @@ class Procmon(Auxiliary):
         self.procmon_pmc = os.path.join(bin_path, "procmon.pmc")
         self.procmon_pml = os.path.join(bin_path, "procmon.pml")
         self.procmon_xml = os.path.join(bin_path, "procmon.xml")
-        log.debug(bin_path)
+        
+        log.info('============================')
+        log.info(bin_path)
+        log.info('============================')
 
         if not os.path.exists(self.procmon_exe) or \
                 not os.path.exists(self.procmon_pmc):
