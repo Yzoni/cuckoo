@@ -10,6 +10,7 @@ from lib.common.abstracts import Auxiliary
 from lib.common.exceptions import CuckooDisableModule, CuckooPackageError
 from lib.common.results import upload_to_host
 
+import logging
 log = logging.getLogger(__name__)
 
 class Procmon(Auxiliary):
