@@ -11,7 +11,7 @@ class Eventlog(Auxiliary):
     def start(self):
         self.key = "eventlog"
 
-        self.log_path = "C:/System32/Winevt/Logs/System.evtx"
+        self.log_path = "C:/Windows/System32/Winevt/Logs/System.evtx"
 
         if not os.path.exists(self.log_path):
             raise CuckooPackageError(
