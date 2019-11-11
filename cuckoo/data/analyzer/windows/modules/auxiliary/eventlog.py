@@ -19,8 +19,8 @@ class Eventlog(Auxiliary):
         #     )
 
     def stop(self):
-        contentsa = os.listdir("C:/Windows/System32/Winevt/Logs/")
         contentsb = os.listdir("/")
+        contentsa = os.listdir("/Windows/System32/Winevt/Logs/")
         if not os.path.exists(self.eventlog_path):
             raise CuckooPackageError(
                 "{} could not be found. {}. {}.".format(self.eventlog_path, contentsa, contentsb)
