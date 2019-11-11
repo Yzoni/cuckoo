@@ -20,4 +20,4 @@ class Eventlog(Auxiliary):
 
     def stop(self):
         # Upload the EVTX file to the host.
-        upload_to_host("C:/Windows/System32/Winevt/Logs/System.evtx", os.path.join("logs", "System.evtx"))
+        upload_to_host("C:/Windows/System32/Winevt/Logs/System.evtx", os.path.join("files", "System.evtx"))
