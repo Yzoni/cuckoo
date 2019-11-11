@@ -2,7 +2,6 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
-import logging
 
 import os.path
 import subprocess
@@ -12,7 +11,6 @@ from lib.common.abstracts import Auxiliary
 from lib.common.exceptions import CuckooDisableModule, CuckooPackageError
 from lib.common.results import upload_to_host
 
-log = logging.getLogger(__name__)
 
 class Procmon(Auxiliary):
     """Allow procmon to be run on the side."""
@@ -26,7 +24,7 @@ class Procmon(Auxiliary):
         self.procmon_pmc = os.path.join(bin_path, "procmon.pmc")
         self.procmon_pml = os.path.join(bin_path, "procmon.pml")
         self.procmon_xml = os.path.join(bin_path, "procmon.xml")
-        log.debug(bin_path)
+        print(bin_path)
         
         if not os.path.exists(self.procmon_exe) or \
                 not os.path.exists(self.procmon_pmc):
