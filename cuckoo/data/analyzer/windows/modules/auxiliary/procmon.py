@@ -2,6 +2,8 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
+import logging
+
 import os.path
 import subprocess
 import time
@@ -10,7 +12,6 @@ from lib.common.abstracts import Auxiliary
 from lib.common.exceptions import CuckooDisableModule, CuckooPackageError
 from lib.common.results import upload_to_host
 
-import logging
 log = logging.getLogger(__name__)
 
 class Procmon(Auxiliary):
