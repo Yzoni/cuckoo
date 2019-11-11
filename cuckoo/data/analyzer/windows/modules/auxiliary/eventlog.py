@@ -11,13 +11,13 @@ class Eventlog(Auxiliary):
     def start(self):
         self.key = "eventlog"
 
-        self.eventlog_path = "C:/Windows/System32/Winevt/Logs/System.evtx"
-
-        if not os.path.exists(self.eventlog_path):
-            raise CuckooPackageError(
-                "{} could not be found.".format(self.eventlog_path)
-            )
+        # self.eventlog_path = "C:/Windows/System32/Winevt/Logs/System.evtx"
+        #
+        # if not os.path.exists(self.eventlog_path):
+        #     raise CuckooPackageError(
+        #         "{} could not be found.".format(self.eventlog_path)
+        #     )
 
     def stop(self):
         # Upload the EVTX file to the host.
-        upload_to_host(self.eventlog_path, os.path.join("logs", "System.evtx"))
+        upload_to_host("C:/Windows/System32/Winevt/Logs/System.evtx", os.path.join("logs", "System.evtx"))
