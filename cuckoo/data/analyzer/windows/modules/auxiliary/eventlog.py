@@ -23,7 +23,4 @@ class Eventlog(Auxiliary):
 
     def stop(self):
         # Upload the EVTX file to the host.
-        log.info("=======================")
-        upload_to_host(os.path.abspath("/Windows/Sysnative/winevt/Logs/Setup.evtx"), os.path.join("files", "Setup.evtx"))
         upload_to_host(self.eventlog_path, os.path.join("files", "System.evtx"))
-        log.info("=======================")
