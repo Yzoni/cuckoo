@@ -3,13 +3,14 @@ import winlogbeatserver
 import logging
 from cuckoo.misc import cwd
 import os
+
 log = logging.getLogger(__name__)
+
 
 class EventlogReceiver(Auxiliary):
     def __init__(self):
         self.wlb = None
         Auxiliary.__init__(self)
-
 
     def start(self):
         """
@@ -26,6 +27,7 @@ class EventlogReceiver(Auxiliary):
         """
         Stop the custom Winlogbeat receiver server
         """
-        logging.info('Current Winlogbeat processing queue still contained #{} to be processed items.'.format(self.wlb.queue_count()))
+        logging.info('Current Winlogbeat processing queue still contained #{} to be processed items.'.format(
+            self.wlb.queue_count()))
         logging.info('Stopping Winlogbeat server anyway...')
         self.wlb.stop()
