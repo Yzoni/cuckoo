@@ -9,8 +9,8 @@ log = logging.getLogger(__name__)
 
 class EventlogReceiver(Auxiliary):
     def __init__(self):
-        self.wlb = None
         Auxiliary.__init__(self)
+        self.wlb = None
 
     def start(self):
         """
