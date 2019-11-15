@@ -32,7 +32,7 @@ class EventlogReceiver(Auxiliary):
             self.wlb.queue_size()))
         
         while self.wlb.queue_size() > 0:
-            logging.info('Winlogbeat queue stil not empty, {} items remaining.'.format(self.wlb.queue_size()))
+            logging.info('Winlogbeat queue still not empty, {} items remaining.'.format(self.wlb.queue_size()))
             time.sleep(5)
         
         logging.info('Queue empty... {} items remaining'.format(self.wlb.queue_size()))
