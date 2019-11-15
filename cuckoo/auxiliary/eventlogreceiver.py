@@ -1,5 +1,5 @@
 from cuckoo.common.abstracts import Auxiliary
-import winlogbeatserver
+from winlogbeatserver import winlogbeatserver
 import logging
 from cuckoo.misc import cwd
 import os
