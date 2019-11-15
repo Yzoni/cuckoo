@@ -28,6 +28,6 @@ class EventlogReceiver(Auxiliary):
         Stop the custom Winlogbeat receiver server
         """
         logging.info('Current Winlogbeat processing queue still contained #{} to be processed items.'.format(
-            self.wlb.queue_count()))
+            self.wlb.queue_size()))
         logging.info('Stopping Winlogbeat server anyway...')
         self.wlb.stop()
