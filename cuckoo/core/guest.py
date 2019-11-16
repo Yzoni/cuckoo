@@ -278,6 +278,7 @@ class GuestManager(object):
         self.task_id = task_id
         self.analysis_manager = analysis_manager
         self.timeout = None
+        self.force_timeout = None
 
         # Just in case we have an old agent inside the Virtual Machine. This
         # allows us to remain backwards compatible (for now).
@@ -430,6 +431,7 @@ class GuestManager(object):
 
         self.options = options
         self.timeout = options["timeout"] + config("cuckoo:timeouts:critical")
+        self.force_timeout = config("cuckoo:timeouts:force_timeout")
 
         # Wait for the agent to come alive.
         self.wait_available()
@@ -569,7 +571,11 @@ class GuestManager(object):
 
             if status["status"] == "complete":
                 log.info("%s: analysis completed successfully", self.vmid)
-                return
+                if self.force_timeout:
+                    log.info("%s: continuing until timeout according to config", self.vmid)
+                    continue
+                else:
+                    return
             elif status["status"] == "exception":
                 log.warning(
                     "%s: analysis #%s caught an exception\n%s",

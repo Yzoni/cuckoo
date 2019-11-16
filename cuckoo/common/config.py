@@ -257,6 +257,7 @@ class Config(object):
                 "timeout": Int(60, allow_empty=True),
             },
             "timeouts": {
+                "force_timeout": Boolean(True),
                 "default": Int(120),
                 "critical": Int(60),
                 "vm_state": Int(60),
