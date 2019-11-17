@@ -37,4 +37,4 @@ class EventlogReceiver(Auxiliary):
             time.sleep(5)
 
         logging.info('Queue empty... {} items remaining'.format(self.wlb.queue_size()))
-        self.wlb.stop()
+        self.wlb.stop(compress=True)
