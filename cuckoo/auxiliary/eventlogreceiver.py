@@ -62,7 +62,7 @@ class EventlogReceiver(Auxiliary):
                 "Wineventlog server already dead... {}; {}".format(out, err))
 
         try:
-            self.proc.terminate()
+            self.proc.kill()
             time.sleep(2)
         except:
             try:
