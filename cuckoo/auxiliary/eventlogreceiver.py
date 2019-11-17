@@ -11,7 +11,7 @@ log = logging.getLogger(__name__)
 class EventlogReceiver(Auxiliary):
     def __init__(self):
         Auxiliary.__init__(self)
-        self.proc = None
+        self.wlb = None
 
     def start(self):
         """
