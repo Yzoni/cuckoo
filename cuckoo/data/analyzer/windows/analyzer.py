@@ -678,14 +678,22 @@ class Analyzer(object):
             log.info("Enabled timeout enforce, running for the full timeout.")
             pid_check = False
 
-        while self.do_run or self.time_counter < 900:
-            if not self.do_run and self.time_counter < 900:
+        own_timeout = 900
+        def own_timeout_is_exceeded():
+            if self.time_counter < own_timeout:
+                return False
+            return True
+        
+
+        while self.do_run or not own_timeout_is_exceeded():
+            if not self.do_run and not own_timeout_is_exceeded():
                 log.info('Waiting to finish sending all logs')
-            
+            else:
+                if self.time_counter == int(self.config.timeout):
+                    log.info("Analysis timeout hit, terminating analysis.")
+                    break
+
             self.time_counter += 1
-            if self.time_counter == int(self.config.timeout):
-                log.info("Analysis timeout hit, terminating analysis.")
-                break
 
             # If the process lock is locked, it means that something is
             # operating on the list of monitored processes. Therefore we
@@ -709,9 +717,13 @@ class Analyzer(object):
                     # If none of the monitored processes are still alive, we
                     # can terminate the analysis.
                     if not self.process_list.pids:
-                        log.info("Process list is empty, "
-                                 "terminating analysis.")
-                        break
+                        if own_timeout_is_exceeded():
+                            log.info("Process list is empty, "
+                                     "terminating analysis.")
+                            break
+                        else:
+                            log.info("Process list is empty, "
+                                     "but timeout for sending files is not yet exceeded")
 
                     # Update the list of monitored processes available to the
                     # analysis package. It could be used for internal
