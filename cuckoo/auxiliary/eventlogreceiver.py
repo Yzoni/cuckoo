@@ -28,7 +28,7 @@ class EventlogReceiver(Auxiliary):
                  "/root/winlogbeatserver/winlogbeatserver/winlogbeatserver.py",
                  eventlogs_path,
                  '--debug']
-        self.proc = Popen(
+        self.proc = subprocess.Popen(
             pargs, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True
         )
 
