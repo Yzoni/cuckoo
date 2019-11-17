@@ -20,26 +20,28 @@ class EventlogReceiver(Auxiliary):
         """
         Start the custom Winlogbeat receiver server
         """
-        eventlogs_path = cwd("eventlogs", analysis=self.task.id)
-        os.mkdir(eventlogs_path)
-
-
-        pargs = [sys.executable,
-                 "/root/winlogbeatserver/winlogbeatserver/winlogbeatserver.py",
-                 eventlogs_path,
-                 '--debug']
-        self.proc = subprocess.Popen(
-            pargs, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True
-        )
-
-        time.sleep(3)
-        if not self.proc.poll():
-            log.info('Eventlog server started')
-        
+        # eventlogs_path = cwd("eventlogs", analysis=self.task.id)
+        # os.mkdir(eventlogs_path)
+        # 
+        # 
+        # pargs = [sys.executable,
+        #          "/root/winlogbeatserver/winlogbeatserver/winlogbeatserver.py",
+        #          eventlogs_path,
+        #          '--debug']
+        # self.proc = subprocess.Popen(
+        #     pargs, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True
+        # )
+        # 
+        # time.sleep(3)
+        # if not self.proc.poll():
+        #     log.info('Eventlog server started')
+        # 
         # self.wlb = winlogbeatserver.WinlogBeat(eventlogs_path)
         # 
         # log.info('Starting Winlogbeat server')
         # self.wlb.start()
+
+        pass
 
     def stop(self):
         """
@@ -54,22 +56,22 @@ class EventlogReceiver(Auxiliary):
         #
         # logging.info('Queue empty... {} items remaining'.format(self.wlb.queue_size()))
         # self.wlb.stop()
-
-        if self.proc.poll():
-            out, err = self.proc.communicate()
-            raise CuckooOperationalError(
-                "Wineventlog server already dead... {}; {}".format(out, err))
-
-        try:
-            self.proc.terminate()
-            time.sleep(2)
-        except:
-            try:
-                if not self.proc.poll():
-                    log.debug("Killing Wineventlog")
-                    self.proc.kill()
-            except OSError as e:
-                log.debug("Error killing Wineventlog: %s. Continue", e)
-            except Exception as e:
-                log.exception("Unable to stop the Wineventlog with pid %d: %s",
-                              self.proc.pid, e)
+        pass
+        # if self.proc.poll():
+        #     out, err = self.proc.communicate()
+        #     raise CuckooOperationalError(
+        #         "Wineventlog server already dead... {}; {}".format(out, err))
+        #
+        # try:
+        #     self.proc.terminate()
+        #     time.sleep(2)
+        # except:
+        #     try:
+        #         if not self.proc.poll():
+        #             log.debug("Killing Wineventlog")
+        #             self.proc.kill()
+        #     except OSError as e:
+        #         log.debug("Error killing Wineventlog: %s. Continue", e)
+        #     except Exception as e:
+        #         log.exception("Unable to stop the Wineventlog with pid %d: %s",
+        #                       self.proc.pid, e)
