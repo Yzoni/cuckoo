@@ -535,6 +535,8 @@ class GuestManager(object):
             return
 
         count = 0
+        
+        start = time.time()
         end = time.time() + self.timeout
 
         while db.guest_get_status(self.task_id) == "running" and self.do_run:
@@ -572,8 +574,12 @@ class GuestManager(object):
             if status["status"] == "complete":
                 log.info("%s: analysis completed successfully", self.vmid)
                 if self.force_timeout:
-                    log.info("%s: continuing until timeout according to config", self.vmid)
-                    continue
+                    if (time.time() - start) > 10:
+                        log.info("%s: continuing until timeout according to config", self.vmid)
+                        continue
+                    else:
+                        log.info('Analysis took less than 10 seconds, stopping even though force timeout is set!')
+                        return
                 else:
                     return
             elif status["status"] == "exception":
