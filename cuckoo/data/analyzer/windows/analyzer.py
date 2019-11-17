@@ -3,6 +3,7 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
+import time
 import datetime
 import hashlib
 import logging
@@ -424,6 +425,7 @@ class Analyzer(object):
         self.target = None
         self.do_run = True
         self.time_counter = 0
+        self.start_time = time.time()
 
         self.process_lock = threading.Lock()
         self.default_dll = None
@@ -793,7 +795,14 @@ class Analyzer(object):
         self.files.dump_files()
 
         # Hell yeah.
+        timeout_time = 600
         log.info("Analysis completed.")
+        completion_time = time.time()
+        while completion_time - self.start_time < timeout_time:
+            completion_time = time.time()
+            log.info('Still waiting before closing analyzer ({} of {} seconds remaining)'.format(completion_time, timeout_time))
+            time.sleep(60)
+        
         return True
 
 if __name__ == "__main__":
