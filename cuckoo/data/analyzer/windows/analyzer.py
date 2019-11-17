@@ -678,20 +678,22 @@ class Analyzer(object):
             log.info("Enabled timeout enforce, running for the full timeout.")
             pid_check = False
 
-        own_timeout = 900
-        def own_timeout_is_exceeded():
-            if self.time_counter < own_timeout:
-                return False
-            return True
-        
 
-        while self.do_run or not own_timeout_is_exceeded():
-            if not self.do_run and not own_timeout_is_exceeded():
-                log.info('Waiting to finish sending all logs')
-            else:
-                if self.time_counter == int(self.config.timeout):
-                    log.info("Analysis timeout hit, terminating analysis.")
+
+        custom_finished = False
+        custom_finished_counter = 0
+        custom_finished_end = 600
+        while self.do_run:
+            if custom_finished:
+                log.info('Analysis ended but staying alive for log sending... ({})'.format(custom_finished_counter))
+                custom_finished_counter += 1
+                if custom_finished_counter > custom_finished_end:
+                    log.info('Breaking by custom timeout')
                     break
+            
+            if self.time_counter == int(self.config.timeout):
+                log.info("Analysis timeout hit, terminating analysis.")
+                custom_finished = True
 
             self.time_counter += 1
 
@@ -717,13 +719,9 @@ class Analyzer(object):
                     # If none of the monitored processes are still alive, we
                     # can terminate the analysis.
                     if not self.process_list.pids:
-                        if own_timeout_is_exceeded():
-                            log.info("Process list is empty, "
-                                     "terminating analysis.")
-                            break
-                        else:
-                            log.info("Process list is empty, "
-                                     "but timeout for sending files is not yet exceeded")
+                        log.info("Process list is empty, "
+                                 "terminating analysis.")
+                        custom_finished = True
 
                     # Update the list of monitored processes available to the
                     # analysis package. It could be used for internal
