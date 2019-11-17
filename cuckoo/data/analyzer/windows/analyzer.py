@@ -678,7 +678,10 @@ class Analyzer(object):
             log.info("Enabled timeout enforce, running for the full timeout.")
             pid_check = False
 
-        while self.do_run:
+        while self.do_run or self.time_counter > 900:
+            if not self.do_run and self.time_counter > 900:
+                log.info('Waiting to finish sending all logs')
+            
             self.time_counter += 1
             if self.time_counter == int(self.config.timeout):
                 log.info("Analysis timeout hit, terminating analysis.")
@@ -795,14 +798,6 @@ class Analyzer(object):
         self.files.dump_files()
 
         # Hell yeah.
-        timeout_time = 600
-        log.info("Analysis completed.")
-        completion_time = time.time()
-        while completion_time - self.start_time < timeout_time:
-            completion_time = time.time()
-            log.info('Still waiting before closing analyzer ({} of {} seconds remaining)'.format(completion_time, timeout_time))
-            time.sleep(60)
-        
         return True
 
 if __name__ == "__main__":
