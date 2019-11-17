@@ -678,8 +678,8 @@ class Analyzer(object):
             log.info("Enabled timeout enforce, running for the full timeout.")
             pid_check = False
 
-        while self.do_run or self.time_counter > 900:
-            if not self.do_run and self.time_counter > 900:
+        while self.do_run or self.time_counter < 900:
+            if not self.do_run and self.time_counter < 900:
                 log.info('Waiting to finish sending all logs')
             
             self.time_counter += 1
