@@ -385,6 +385,7 @@ def init_binaries():
         throw()
 
 def init_rooter():
+    return
     """If required, check if the rooter is running and if we can connect
     to it. The default configuration doesn't require the rooter to be ran."""
     required = (
