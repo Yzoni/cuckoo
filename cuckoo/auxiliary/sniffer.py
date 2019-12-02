@@ -80,6 +80,17 @@ class Sniffer(Auxiliary):
                 ")",
             ])
 
+            # Do not capture winlogbeat server traffic
+            pargs.extend([
+                "and", "not", "(",
+                "dst", "host", self.machine.resultserver_ip, "and",
+                "dst", "port", "%s" % 5000,
+                ")", "and", "not", "(",
+                "src", "host", self.machine.resultserver_ip, "and",
+                "src", "port", "%s" % 5000,
+                ")",
+            ])
+
             if bpf:
                 pargs.extend(["and", "(", bpf, ")"])
 
