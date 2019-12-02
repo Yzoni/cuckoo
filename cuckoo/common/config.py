@@ -295,6 +295,9 @@ class Config(object):
             "__star__": ("virtualbox", "machines"),
         },
         "auxiliary": {
+            "eventlog": {
+                "enabled": Boolean(True),
+            },
             "eventlogreceiver": {
                 "enabled": Boolean(True),
             },
