@@ -678,24 +678,11 @@ class Analyzer(object):
             log.info("Enabled timeout enforce, running for the full timeout.")
             pid_check = False
 
-
-
-        custom_finished = False
-        custom_finished_counter = 0
-        custom_finished_end = 600
         while self.do_run:
-            if custom_finished:
-                log.info('Analysis ended but staying alive for log sending... ({})'.format(custom_finished_counter))
-                custom_finished_counter += 1
-                if custom_finished_counter > custom_finished_end:
-                    log.info('Breaking by custom timeout')
-                    break
-            
+            self.time_counter += 1
             if self.time_counter == int(self.config.timeout):
                 log.info("Analysis timeout hit, terminating analysis.")
-                custom_finished = True
-
-            self.time_counter += 1
+                break
 
             # If the process lock is locked, it means that something is
             # operating on the list of monitored processes. Therefore we
@@ -721,7 +708,7 @@ class Analyzer(object):
                     if not self.process_list.pids:
                         log.info("Process list is empty, "
                                  "terminating analysis.")
-                        custom_finished = True
+                        break
 
                     # Update the list of monitored processes available to the
                     # analysis package. It could be used for internal
@@ -747,6 +734,7 @@ class Analyzer(object):
             finally:
                 # Zzz.
                 KERNEL32.Sleep(1000)
+
 
         if not self.do_run:
             log.debug("The analyzer has been stopped on request by an "
