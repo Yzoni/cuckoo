@@ -20,7 +20,10 @@ class Eventlog(Auxiliary):
             raise CuckooPackageError(
                 "{} could not be found.".format("/Windows/System32/")
             )
+        else:
+            log.info('Eventlog file found in System32!')
 
     def stop(self):
         # Upload the EVTX file to the host.
+        log.info('Uploading eventlog evtx to host.')
         upload_to_host(self.eventlog_path, os.path.join("files", "System.evtx"))
