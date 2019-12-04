@@ -63,7 +63,7 @@ class Eventlog(Processing):
             os.unlink(eventlog)
 
             # Merge all extracted files together
-            for partial_extracted in os.path.listdir(current_extraction_path):
+            for partial_extracted in os.listdir(current_extraction_path):
                 partial_path = os.path.join(current_extraction_path, partial_extracted)
                 log.info('Opening partial event log: {}'.format(partial_path))
                 with open(partial_path) as f_partial:
