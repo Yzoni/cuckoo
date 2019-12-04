@@ -4,6 +4,7 @@ import os.path
 import subprocess
 import logging
 import distutils
+import shutil
 
 from cuckoo.misc import cwd
 from cuckoo.common.abstracts import Processing
@@ -81,7 +82,7 @@ class Eventlog(Processing):
                             f.write(f_partial.read())
 
             # Delete merged partial CSV directory
-            os.rmdir(current_extraction_path)
+            shutil.rmtree(current_extraction_path)
 
         log.info('Compressing merged event log files...')
         # Compress the created csv files
