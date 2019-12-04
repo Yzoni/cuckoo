@@ -17,7 +17,7 @@ class Eventlog(Processing):
 
     def list_system_evtx_filepaths(self):
         """Get all paths including archived ones of system.evtx"""
-        eventlog_root = self.file_path
+        eventlog_root = os.path.join(self.analysis_path, "files")
 
         system_logs = []
         for filename in os.listdir(eventlog_root):
