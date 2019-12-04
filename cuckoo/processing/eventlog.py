@@ -15,14 +15,14 @@ class Eventlog(Processing):
 
     key = "eventlog"
 
-    def list_system_evtx_filepaths(self):
+    @staticmethod
+    def list_system_evtx_filepaths(event_log_upload_location):
         """Get all paths including archived ones of system.evtx"""
-        eventlog_root = os.path.join(self.analysis_path, "files")
 
         system_logs = []
-        for filename in os.listdir(eventlog_root):
+        for filename in os.listdir(event_log_upload_location):
             if filename.startswith('Archive-System') or filename.startswith('System'):
-                new_path = os.path.join(eventlog_root, filename)
+                new_path = os.path.join(event_log_upload_location, filename)
                 system_logs.append(new_path)
 
         log.info('Found event logs: {}'.format(system_logs))
@@ -40,6 +40,7 @@ class Eventlog(Processing):
             log.warning('Cannot compress eventlog file, unable to find xz binary utility.')
 
     def run(self):
+        eventlog_root = os.path.join(self.analysis_path, "files")
         eventlogs_extracted_path = cwd("eventlogs", analysis=self.task.id)
         if not os.path.exists(eventlogs_extracted_path):
             os.mkdir(eventlogs_extracted_path)
@@ -49,12 +50,17 @@ class Eventlog(Processing):
         process_file = os.path.join(eventlogs_extracted_path, 'process.csv')
         thread_file = os.path.join(eventlogs_extracted_path, 'thread.csv')
         status_file = os.path.join(eventlogs_extracted_path, 'status.csv')
-        for eventlog in self.list_system_evtx_filepaths():
-            current_extraction_path = os.path.join(eventlogs_extracted_path, os.path.split(eventlog)[-1])
+        for eventlog in self.list_system_evtx_filepaths(eventlog_root):
+            current_extraction_path = os.path.join(eventlogs_extracted_path, os.path.split(eventlog)[-1].split('.')[0])
 
             log.info('Going to extract {} to {}'.format(eventlog, current_extraction_path))
-            subprocess.run(["evtx_extract", eventlog,
-                            "-f", current_extraction_path])
+            status = subprocess.check_call(["evtx_extract", eventlog, "-f", current_extraction_path])
+            if status != 0:
+                log.error('Failed to extract evtx, exitcode {}'.format(status))
+            
+            # Delete extracted evtx file
+            log.info('Deleting {}'.format(eventlog))
+            os.unlink(eventlog)
 
             # Merge all extracted files together
             for partial_extracted in os.path.listdir(current_extraction_path):
@@ -73,6 +79,9 @@ class Eventlog(Processing):
                     if partial_extracted.startswith('status'):
                         with open(status_file, 'wa') as f:
                             f.write(f_partial.read())
+
+            # Delete merged partial CSV directory
+            os.rmdir(current_extraction_path)
 
         log.info('Compressing merged event log files...')
         # Compress the created csv files
