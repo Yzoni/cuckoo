@@ -84,11 +84,12 @@ class Eventlog(Processing):
             # Delete merged partial CSV directory
             shutil.rmtree(current_extraction_path)
 
-        log.info('Compressing merged event log files...')
+        log.info('Compressing merged event log files for {} ...'.format(eventlogs_extracted_path))
         # Compress the created csv files
         self.compress(syscall_file)
         self.compress(process_file)
         self.compress(thread_file)
         self.compress(status_file)
+        log.info('Compression of merged file finished for {}'.format(eventlogs_extracted_path))
 
         return
