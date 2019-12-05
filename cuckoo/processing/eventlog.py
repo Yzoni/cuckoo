@@ -55,10 +55,17 @@ class Eventlog(Processing):
             current_extraction_path = os.path.join(eventlogs_extracted_path, os.path.split(eventlog)[-1].split('.')[0])
 
             log.info('Going to extract {} to {}'.format(eventlog, current_extraction_path))
-            status = subprocess.check_call(["evtx_extract", eventlog, "-f", current_extraction_path])
-            if status != 0:
-                log.error('Failed to extract evtx, exitcode {}'.format(status))
-            
+
+            if not os.path.isfile(eventlog):
+                log.error('Event log ({}) does not exist'.format(eventlog))
+                continue
+                
+            try:
+                subprocess.check_call(["evtx_extract", eventlog, "-f", current_extraction_path])
+            except subprocess.CalledProcessError:
+                log.error('Failed to extract evtx {}'.format(eventlog))
+                continue
+
             # Delete extracted evtx file
             log.info('Deleting {}'.format(eventlog))
             os.unlink(eventlog)

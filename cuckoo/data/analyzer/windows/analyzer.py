@@ -798,6 +798,7 @@ class Analyzer(object):
         # Hell yeah.
         return True
 
+
 if __name__ == "__main__":
     success = False
     error = ""
