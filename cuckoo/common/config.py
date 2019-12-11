@@ -537,6 +537,7 @@ class Config(object):
         "processing": {
             "eventlog": {
                 "enabled": Boolean(True),
+                "evtx_extract_timeout": Int(1200)
             },
             "analysisinfo": {
                 "enabled": Boolean(True),

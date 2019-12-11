@@ -5,6 +5,7 @@ import subprocess
 import logging
 import distutils
 import shutil
+import threading
 
 from cuckoo.misc import cwd
 from cuckoo.common.abstracts import Processing
@@ -40,12 +41,23 @@ class Eventlog(Processing):
         else:
             log.warning('Cannot compress eventlog file, unable to find xz binary utility.')
 
+    def cmd_with_timeout(self, cmd, timeout):
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        timer = threading.Timer(timeout, proc.kill)
+        try:
+            timer.start()
+            stdout, stderr = proc.communicate()
+            if stderr:
+                log.error("Error during evtx extract of task #{}: {}".format(self.task.id, stderr))
+        finally:
+            timer.cancel()
+
     def run(self):
         eventlog_root = os.path.join(self.analysis_path, "files")
         eventlogs_extracted_path = cwd("eventlogs", analysis=self.task.id)
         if not os.path.exists(eventlogs_extracted_path):
             os.mkdir(eventlogs_extracted_path)
-        
+
         # Run extraction to csv
         syscall_file = os.path.join(eventlogs_extracted_path, 'syscall.csv')
         process_file = os.path.join(eventlogs_extracted_path, 'process.csv')
@@ -59,9 +71,9 @@ class Eventlog(Processing):
             if not os.path.isfile(eventlog):
                 log.error('Event log ({}) does not exist'.format(eventlog))
                 continue
-                
+
             try:
-                subprocess.check_call(["evtx_extract", eventlog, "-f", current_extraction_path])
+                self.cmd_with_timeout(["evtx_extract", eventlog, "-f", current_extraction_path], self.options.get("evtx_extract_timeout"))
             except subprocess.CalledProcessError:
                 log.error('Failed to extract evtx {}'.format(eventlog))
                 continue
