@@ -47,6 +47,10 @@ class Eventlog(Processing):
         try:
             timer.start()
             stdout, stderr = proc.communicate()
+
+            if not timer.is_alive():
+                log.error('XZ compression of {} timed-out after {} seconds!'.format(cmd, timeout))
+                raise RuntimeError
             if stderr:
                 log.error("Error during evtx extract of task #{}: {}".format(self.task.id, stderr))
         finally:
@@ -76,6 +80,9 @@ class Eventlog(Processing):
                 self.cmd_with_timeout(["evtx_extract", eventlog, "-f", current_extraction_path], self.options.get("evtx_extract_timeout"))
             except subprocess.CalledProcessError:
                 log.error('Failed to extract evtx {}'.format(eventlog))
+                continue
+            except RuntimeError:
+                log.error('Timeout reached, skipping this eventlog: {}'.format(eventlog))
                 continue
 
             # Delete extracted evtx file
