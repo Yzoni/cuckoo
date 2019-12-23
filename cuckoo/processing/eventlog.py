@@ -35,7 +35,7 @@ class Eventlog(Processing):
     def compress(filename):
         xz_bin = distutils.spawn.find_executable("xz")
         if xz_bin:
-            status = subprocess.check_call([xz_bin, filename])
+            status = subprocess.check_call([xz_bin, '--threads=0', filename])
             if status != 0:
                 log.error('Eventlog compressions of {} failed'.format(filename))
         else:
