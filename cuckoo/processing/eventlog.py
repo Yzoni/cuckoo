@@ -55,6 +55,7 @@ class Eventlog(Processing):
                 log.error("Error during evtx extract of task #{}: {}".format(self.task.id, stderr))
         finally:
             timer.cancel()
+            log.info('Extraction completed')
 
     def run(self):
         eventlog_root = os.path.join(self.analysis_path, "files")
